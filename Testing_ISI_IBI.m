@@ -9,8 +9,7 @@ sigmaB = 1.5*sigmaA;
 fr = 25;
 num_of_tests = 100;
 m = nan(num_of_tests,1);
-A = 2;
-
+[settings, params] = load_settings_params(3);
 binWidth = 50*dt;
 bin = 0:binWidth:(tSim-dt);
 val = zeros(1,length(bin));
@@ -18,7 +17,7 @@ val = zeros(1,length(bin));
 for i = 1 : num_of_tests
     
     
-    [spikeMat, tVec] = ISI_IBI_spikeGen(tSim, nTrials, dt , muA, muB, sigmaA, sigmaB, fr, A);
+    [spikeMat, tVec] = ISI_IBI_spikeGen(params,settings);
 %     close all;
     m(i) = round(mean(sum(spikeMat,2)),1);
     disp(num2str(i))
