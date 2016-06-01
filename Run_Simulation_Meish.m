@@ -47,7 +47,7 @@ end
 mkdir('Figures');
                                  
 %% Simulation
-num_of_simulations = 10;
+num_of_simulations = settings.num_of_simulations;
 
 for n = 1 : num_of_simulations
     

@@ -1,7 +1,7 @@
 function [settings, params] = load_settings_params(ModelMode)
 
 %% Network_params
-params.num_of_presynaptic_neurons = 100;
+params.num_of_presynaptic_neurons = 3;
 params.num_of_postsynaptic_neurons = 20;
 params.p = 0.1; % Connectivity probabillity
 params.fr = 25; % Average Firing rate
@@ -73,8 +73,8 @@ if settings.one_on_one
     params.num_of_postsynaptic_neurons = 1;
 end
 settings.SW = 0.02; % This is the window size for the synchronicity window in msec
-params.mu_lastAP =  200; % The mean value of the last firing time in the case of ISI and IBI firing if the neuron still hasn't fired.
+params.mu_lastAP = 200; % The mean value of the last firing time in the case of ISI and IBI firing if the neuron still hasn't fired.
 params.sigma_lastAP = 100; % The std of the lasting firing time in the case of ISI and IBI firing if the neuron still hasn't fired.
-
+settings.num_of_simulations = 10; % Number of simulations to run 
 settings;
 params;

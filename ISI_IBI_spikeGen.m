@@ -8,7 +8,7 @@ function [spikeMat, tVec,h] = ISI_IBI_spikeGen(params,settings)
 % dt is the size of each time step in the simulation.
 % nTrials is the number of presynaptic neurons.
 % p is the default chance for a spike
-A = 2;
+A = 1.85;
 
 nBins = floor(settings.tmax/settings.dt);
 spikeMat = zeros(params.num_of_presynaptic_neurons,nBins);
@@ -25,8 +25,8 @@ B = cumprod(1-Y)./(1-Y) .* Y;
 Y = 1/(sum(X.*B)) * B;
 
 Y = A * Y/max(Y);
-figure;
-area(X*1e3,Y*settings.dt*params.fr);
+% figure;
+% area(X*1e3,Y*settings.dt*params.fr);
 
 for i = 1 : size(spikeMat,1)
     for j = 1 : size(spikeMat,2)
@@ -37,12 +37,18 @@ for i = 1 : size(spikeMat,1)
         if ~isempty(lastAP) 
             P = Y(j-lastAP); % The probability P is the value in Y which corresponds to how long has it been since the last spike
         else
-            pseudo_lastAP = inf;
-            while (j-pseudo_lastAP) < 1 || (j-pseudo_lastAP) > numel(Y)
-                pseudo_lastAP = round(normrnd(params.mu_lastAP/settings.dt * 1e-3,params.sigma_lastAP/settings.dt * 1e-3)); % last time that the neuron fired drawn from a normal distribution
+            
+            if j == 1
+                pseudo_lastAP = inf;
+                while (j-pseudo_lastAP) < 1 || (j-pseudo_lastAP) > numel(Y)
+                    pseudo_lastAP =  -round(normrnd(params.mu_lastAP/settings.dt * 1e-3,params.sigma_lastAP/settings.dt * 1e-3)); % last time that the neuron fired drawn from a normal distribution
+                end
             end
-                        
-            P = Y(j - pseudo_lastAP);
+            if (j-pseudo_lastAP) < numel(Y)
+                P = Y(j - pseudo_lastAP);
+            else
+                P = 0;
+            end
         end
             spikeMat(i,j) = rand(1,1) <     P * params.fr * settings.dt;
 %             spikeMat(i,j) = rand(1, 1) < params.fr*settings.dt; % This
